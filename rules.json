@@ -1,0 +1,24 @@
+{
+  "VOUCHER": {
+    "price": 5.0,
+    "discount": [
+      "2-for-1"
+    ]
+  },
+  "TSHIRT": {
+    "price": 20.0,
+    "discount": [
+      "bulk"
+    ],
+    "bulk_quantity": 3,
+    "bulk_price": 19.0
+  },
+  "MUG": {
+    "price": 7.5,
+    "discount": [
+
+    ],
+    "bulk_quantity": 0,
+    "bulk_price": 0.0
+  }
+}
