@@ -65,6 +65,49 @@ task :add_discount do
   puts "Discount '#{discount}' added to '#{name}'."
 end
 
+desc 'Remove a discount from a product'
+task :remove_discount do
+  products = load_products
+  name = ask_input('Enter the name of the product to remove discount from').upcase
+  unless products[name]
+    puts "Product #{name} not found."
+    next
+  end
+
+  discount = ask_input("Enter the discount to remove from the present values #{products[name]['discount']}")
+  unless products[name]['discount'].delete(discount) 
+    puts "Discount #{discount} not found for #{name}."
+    next
+  end
+
+  if discount == 'bulk'
+    products[name]['bulk_quantity'] = 0
+    products[name]['bulk_price'] = 0.0
+  end
+  save_products(products)
+  puts "Discount #{discount} removed from #{name}."
+end
+
+desc 'Modify the price of a product'
+task :modify_price do
+  products = load_products
+  name = ask_input('Enter the name of the product to modify price').upcase
+  unless products[name]
+    puts "Product #{name} not found."
+    next
+  end
+
+  price = ask_input("Enter the new price (current price #{products[name]['price']})").to_f
+  if products[name]['discount'].include?("bulk") && products[name]['bulk_price'] >= price
+    puts "Price of the product cannot be lower or equal to the bulk discount"
+    next
+  end
+
+  products[name]['price'] = price
+  save_products(products)
+  puts "Price updated for #{name}."
+end
+
 def load_products
   JSON.parse(File.read('rules.json'))
 rescue StandardError
