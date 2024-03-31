@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'json'
 
 desc 'Add a new product'
@@ -36,30 +38,35 @@ desc 'Add a discount to a product'
 task :add_discount do
   products = load_products
   name = ask_input('Enter the name of the product to add discount').upcase
-  discount = ask_input('Enter the discount (e.g bulk, 2-for-1)')
-  
-  unless products[name]
+  product = products[name]
+
+  unless product
     puts "Product '#{name}' not found."
     next
   end
-  
-  if discount_already_added?(products[name], discount)
+  discount = ask_input('Enter the discount (e.g bulk, 2-for-1)')
+
+  if discount_already_added?(product, discount)
     puts "Discount type '#{discount}' already added. Please remove it before adding a new one."
     next
   end
 
-  add_discount_to_product(products[name], discount)
+  add_discount_to_product(product, discount)
+
   if discount == 'bulk'
-    bulk_quantity = ask_input("Enter Bulk Quantity (current quantity:- #{products[name]['bulk_quantity']}) (leave blank for none)").to_i
-    bulk_price = ask_input("Enter Bulk Price (current bulk price:- #{products[name]['bulk_price']}) (leave blank for none)").to_f
-    products[name]['bulk_quantity'] = bulk_quantity
-    products[name]['bulk_price'] = bulk_price
-    if bulk_price >= products[name]['price']
-      puts "Discount price cannot be more than or equal to the actual price"
+    bulk_quantity_prompt = "Enter Bulk Quantity (current quantity:- #{product['bulk_quantity']}) (leave blank for none)"
+    bulk_price_prompt = "Enter Bulk Price (current bulk price:- #{product['bulk_price']}) (leave blank for none)"
+    bulk_quantity = ask_input(bulk_quantity_prompt).to_i
+    bulk_price = ask_input(bulk_price_prompt).to_f
+
+    product['bulk_quantity'] = bulk_quantity
+    product['bulk_price'] = bulk_price
+
+    if bulk_price >= product['price']
+      puts 'Discount price cannot be more than or equal to the actual price'
       next
     end
   end
-
 
   save_products(products)
   puts "Discount '#{discount}' added to '#{name}'."
@@ -75,7 +82,7 @@ task :remove_discount do
   end
 
   discount = ask_input("Enter the discount to remove from the present values #{products[name]['discount']}")
-  unless products[name]['discount'].delete(discount) 
+  unless products[name]['discount'].delete(discount)
     puts "Discount #{discount} not found for #{name}."
     next
   end
@@ -98,8 +105,8 @@ task :modify_price do
   end
 
   price = ask_input("Enter the new price (current price #{products[name]['price']})").to_f
-  if products[name]['discount'].include?("bulk") && products[name]['bulk_price'] >= price
-    puts "Price of the product cannot be lower or equal to the bulk discount"
+  if products[name]['discount'].include?('bulk') && products[name]['bulk_price'] >= price
+    puts 'Price of the product cannot be lower or equal to the bulk discount'
     next
   end
 
@@ -120,7 +127,7 @@ end
 
 def ask_input(prompt)
   print "#{prompt}: "
-  STDIN.gets.chomp
+  $stdin.gets.chomp
 end
 
 def discount_already_added?(product, discount)

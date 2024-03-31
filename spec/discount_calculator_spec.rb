@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative '../lib/discount_calculator'
 
 RSpec.describe DiscountCalculator do
@@ -42,9 +44,10 @@ RSpec.describe DiscountCalculator do
     context 'when using custom rules' do
       let(:rules) do
         {
-          'VOUCHER' => { 'price' => 5.00, 'discount' => ['2-for-1'] },
-          'TSHIRT' => { 'price' => 20.00, 'discount' => ['bulk', '2-for-1'], 'bulk_quantity' => 3, 'bulk_price' => 19.00 },
-          'MUG' => { 'price' => 7.50, 'discount' => ['3-for-2'] }
+          'VOUCHER' => { 'price' => 5.00, 'discount' => %w[2-for-1] },
+          'TSHIRT' => { 'price' => 20.00, 'discount' => %w[bulk 2-for-1],
+                        'bulk_quantity' => 3, 'bulk_price' => 19.00 },
+          'MUG' => { 'price' => 7.50, 'discount' => %w[3-for-2] }
         }
       end
       let(:calculator) { DiscountCalculator.new(rules) }

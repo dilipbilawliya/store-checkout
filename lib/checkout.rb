@@ -1,6 +1,9 @@
+# frozen_string_literal: true
+
 require 'json'
 require_relative 'discount_calculator'
 
+# Checkout class represents a shopping cart checkout system.
 class Checkout
   attr_reader :cart
 
