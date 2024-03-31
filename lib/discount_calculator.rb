@@ -26,9 +26,8 @@ class DiscountCalculator
   def calculate_buy_sets_and_remaining_quantity(quantity, discount)
     promotion_discount = discount.find { |d| d =~ /\d+-for-\d+/ }
     return [0, quantity] unless promotion_discount
-
-    buy_quantity, free_quantity = promotion_discount.scan(/\d+/).map(&:to_i)
-    buy_quantity -= free_quantity
+    free_quantity, buy_quantity = promotion_discount.scan(/\d+/).map(&:to_i)
+    free_quantity -= buy_quantity
     buy_sets = quantity / (buy_quantity + free_quantity)
     remaining_quantity = quantity % (buy_quantity + free_quantity)
     [buy_sets, remaining_quantity, buy_quantity, free_quantity]
