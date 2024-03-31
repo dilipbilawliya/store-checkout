@@ -20,6 +20,18 @@ task :add_product do
   puts "Product #{name} added successfully."
 end
 
+desc 'Remove a product'
+task :remove_product do
+  products = load_products
+  name = ask_input("Enter the name of the product to remove select from the following #{products.keys}").upcase
+  if products.delete(name)
+    save_products(products)
+    puts "Product #{name} removed successfully."
+  else
+    puts "Product #{name} not found."
+  end
+end
+
 def load_products
   JSON.parse(File.read('rules.json'))
 rescue StandardError
