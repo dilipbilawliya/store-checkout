@@ -8,9 +8,9 @@ class DiscountCalculator
 
   # Calculates the discounted price for an item based on the quantity.
   def apply(item, quantity)
-    return 0 unless @rules[item]
-
     rules = @rules[item]
+    return 0 unless rules
+
     base_price = calculate_base_price(rules, quantity)
     apply_discounts(base_price, rules, quantity)
   end
@@ -39,12 +39,10 @@ class DiscountCalculator
 
   def calculate_buy_sets_and_remaining_quantity(quantity, discount)
     promotion_discount = discount.find { |d| d =~ /\d+-for-\d+/ }
-    return [0, quantity] unless promotion_discount
 
     free_quantity, buy_quantity = promotion_discount.scan(/\d+/).map(&:to_i)
-    free_quantity -= buy_quantity
-    buy_sets = quantity / (buy_quantity + free_quantity)
-    remaining_quantity = quantity % (buy_quantity + free_quantity)
+    buy_sets = quantity / free_quantity
+    remaining_quantity = quantity % free_quantity
     [buy_sets, remaining_quantity, buy_quantity]
   end
 
