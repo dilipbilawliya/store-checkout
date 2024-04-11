@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Calculates quantities for discounts based on specified rules.
-class DiscountQuantityCalculator
+class QuantityCalculator
   def calculate(quantity, discount)
     promotion_discount = find_promotion_discount(discount)
 

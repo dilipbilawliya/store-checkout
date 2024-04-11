@@ -2,32 +2,27 @@
 
 require 'json'
 require_relative 'discount_calculator'
+require_relative 'product'
+require_relative 'cart'
 
 # Checkout class represents a shopping cart checkout system.
 class Checkout
   attr_reader :cart
 
-  def initialize(rules_file)
-    @rules = load_rules(rules_file)
-    @discount = DiscountCalculator.new(@rules)
-    @cart = Hash.new(0)
+  def initialize(products)
+    @discount = DiscountCalculator.new(products)
+    @cart = Cart.new
   end
 
   def scan(item)
-    @cart[item] += 1
+    @cart.add_item(item)
   end
 
   def total
     total_price = 0.0
-    @cart.each do |item, quantity|
+    @cart.items.each do |item, quantity|
       total_price += @discount.apply(item, quantity)
     end
     total_price.round(2)
-  end
-
-  private
-
-  def load_rules(rules_file)
-    JSON.parse(File.read(rules_file))
   end
 end

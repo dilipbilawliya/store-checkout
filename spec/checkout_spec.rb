@@ -10,14 +10,14 @@ RSpec.describe Checkout do
       checkout = Checkout.new(rules_file)
       checkout.scan('VOUCHER')
       checkout.scan('TSHIRT')
-      expect(checkout.cart).to eq({ 'VOUCHER' => 1, 'TSHIRT' => 1 })
+      expect(checkout.cart.items).to eq({ 'VOUCHER' => 1, 'TSHIRT' => 1 })
     end
 
     it 'increments quantity when same item scanned again' do
       checkout = Checkout.new(rules_file)
       checkout.scan('VOUCHER')
       checkout.scan('VOUCHER')
-      expect(checkout.cart['VOUCHER']).to eq(2)
+      expect(checkout.cart.items['VOUCHER']).to eq(2)
     end
   end
 

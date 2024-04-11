@@ -2,14 +2,14 @@
 
 require_relative 'promotion_discount'
 require_relative 'bulk_discount'
-require_relative 'discount_quantity_calculator'
+require_relative 'quantity_calculator'
 
 # Applies discounts to items based on specified rules.
-class DiscountApplier
+class DiscountProcessor
   def initialize
     @promotion_discount = PromotionDiscount.new
     @bulk_discount = BulkDiscount.new
-    @buy_sets_and_remaining_quantity = DiscountQuantityCalculator.new
+    @buy_sets_and_remaining_quantity = QuantityCalculator.new
   end
 
   def apply(base_price, rules, quantity)
