@@ -2,7 +2,7 @@
 
 require 'json'
 require_relative 'discount_calculator'
-require_relative 'product'
+require_relative 'store'
 require_relative 'cart'
 
 # Checkout class represents a shopping cart checkout system.
@@ -19,10 +19,6 @@ class Checkout
   end
 
   def total
-    total_price = 0.0
-    @cart.items.each do |item, quantity|
-      total_price += @discount.apply(item, quantity)
-    end
-    total_price.round(2)
+    @cart.total_price(@discount)
   end
 end
